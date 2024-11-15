@@ -8,7 +8,7 @@ public class Task2 {
 
     private static final ExecutorService executorService = Executors.newWorkStealingPool();
 
-    // Завдання для підрахунку символів у файлі
+    // Завдання для підрахунку символів
     static class FileTask implements Callable<FileResult> {
         private final File file;
 
@@ -20,7 +20,6 @@ public class Task2 {
         public FileResult call() throws Exception {
             long characterCount = 0;
             try {
-                // Читання файлу з вказаним кодуванням UTF-8 (можна змінити на потрібне)
                 List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
                 for (String line : lines) {
                     characterCount += line.length();
@@ -35,7 +34,6 @@ public class Task2 {
         }
     }
 
-    // Клас для збереження результату
     static class FileResult {
         private final String fileName;
         private final long characterCount;
@@ -69,7 +67,6 @@ public class Task2 {
             return;
         }
 
-        // Отримуємо файли в директорії та підкаталогах
         List<File> files = new ArrayList<>();
         findTextFiles(directory, files);
 
@@ -79,7 +76,7 @@ public class Task2 {
                 futures.add(executorService.submit(new FileTask(file)));
             }
 
-            // Виводимо результати
+            // Результати
             for (Future<FileResult> future : futures) {
                 FileResult result = future.get();
                 System.out.println(result);
@@ -95,10 +92,10 @@ public class Task2 {
         if (fileList != null) {
             for (File file : fileList) {
                 if (file.isDirectory()) {
-                    // Якщо це папка, рекурсивно шукаємо в ній
+                    // Рекурсивний пошук в папці
                     findTextFiles(file, files);
                 } else if (file.getName().endsWith(".txt")) {
-                    // Якщо це текстовий файл, додаємо його в список
+                    // Додати текстовий файл в список
                     files.add(file);
                 }
             }
@@ -107,7 +104,7 @@ public class Task2 {
 
     // Головний метод
     public static void main(String[] args) {
-        // Отримуємо директорію від користувача
+        // Отримати директорію
         System.out.println("Enter the directory path:");
         Scanner scanner = new Scanner(System.in);
         String directoryPath = scanner.nextLine().replace("\\", "/"); // Заміна на правильний роздільник для шляху
@@ -117,7 +114,7 @@ public class Task2 {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } finally {
-            executorService.shutdown(); // Завершуємо роботу ExecutorService
+            executorService.shutdown(); // Завершити роботу ExecutorService
         }
     }
 }

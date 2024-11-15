@@ -25,7 +25,7 @@ public class Task1WorkStealing {
         System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
     }
 
-    // Генерація випадкових чисел для масиву
+    // Генерація випадкових чисел
     private static void generateRandomArray(int[][] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
@@ -44,12 +44,12 @@ public class Task1WorkStealing {
         }
     }
 
-    // Пошук мінімального значення за допомогою work stealing
+    // Пошук мінімального значення
     private static int findMinUsingWorkStealing(int[][] array) {
         int numThreads = Runtime.getRuntime().availableProcessors(); // Кількість доступних процесорів
         ForkJoinPool forkJoinPool = new ForkJoinPool(numThreads);
 
-        // Використовуємо рекурсивне завдання для пошуку мінімуму
+        // Рекурсивне завдання для пошуку мінімуму
         return forkJoinPool.invoke(new FindMinTask(array, 0, array.length));
     }
 
@@ -82,9 +82,9 @@ public class Task1WorkStealing {
                 FindMinTask leftTask = new FindMinTask(array, startRow, midRow);
                 FindMinTask rightTask = new FindMinTask(array, midRow, endRow);
 
-                leftTask.fork(); // Запускаємо ліву підзадачу
-                int rightMin = rightTask.compute(); // Обчислюємо праву підзадачу
-                int leftMin = leftTask.join(); // Отримуємо результат з лівої підзадачі
+                leftTask.fork();
+                int rightMin = rightTask.compute(); // Результат з правої підзадачі
+                int leftMin = leftTask.join(); // Результат з лівої підзадачі
 
                 return Math.min(leftMin, rightMin); // Повертаємо мінімум з двох підзадач
             }

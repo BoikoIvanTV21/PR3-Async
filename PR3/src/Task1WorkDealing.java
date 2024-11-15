@@ -28,7 +28,7 @@ public class Task1WorkDealing {
         System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
     }
 
-    // Генерація випадкових чисел для масиву
+    // Генерація випадкових чисел
     private static void generateRandomArray(int[][] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
@@ -47,14 +47,14 @@ public class Task1WorkDealing {
         }
     }
 
-    // Пошук мінімального значення за допомогою багатозадачності
+    // Пошук мінімального значення
     private static int findMinUsingWorkDealing(int[][] array) {
         int numThreads = Runtime.getRuntime().availableProcessors(); // Кількість доступних процесорів
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
 
         AtomicInteger min = new AtomicInteger(Integer.MAX_VALUE); // ініціалізація мінімального значення
 
-        // Паралельне виконання для кожного рядка масиву
+        // Паралельне виконання для кожного рядка
         for (int[] row : array) {
             executorService.submit(() -> {
                 for (int value : row) {
@@ -65,7 +65,7 @@ public class Task1WorkDealing {
 
         executorService.shutdown();
         try {
-            // Очікування завершення всіх завдань
+            // Очікування завершення завдань
             if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
